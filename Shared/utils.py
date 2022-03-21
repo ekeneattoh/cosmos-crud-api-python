@@ -18,17 +18,18 @@ def insert_one_into_db_collection(db_name: str, collection_name: str, data: dict
     :return: dict of the result of the insert
     """
 
+    result = {}
+
     db = get_database(db_name=db_name)
 
     collection = db[collection_name]
 
     try:
         insert_result = collection.insert_one(data)
+        if insert_result.inserted_id is not None:
+            result["data"] = "OK"
 
     except WriteError as e:
-        raise Exception(e)
+        result["data"] = str(e)
 
-    if insert_result.inserted_id is not None:
-        return {
-            "data": "OK"
-        }
+    return result

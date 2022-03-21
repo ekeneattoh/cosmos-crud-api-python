@@ -18,5 +18,7 @@ class TestUtils(unittest.TestCase):
         """
         insert_test = insert_one_into_db_collection(db_name="cocuisson-dev", collection_name="users", data=self.data)
 
+        print(insert_test)
+
         assert insert_test["data"] == "OK"
 
