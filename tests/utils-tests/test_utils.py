@@ -11,20 +11,39 @@ class TestUtils(unittest.TestCase):
             "_id": "ekeneattoh@test.com",
             "company_name": "cocuisson"
         }
+        self.data_two = {
+            "firstname": "Manon",
+            "lastname": "Picot",
+            "_id": "manonpicot@test.com",
+            "company_name": "cocuisson"
+        }
         self.db_name = "cocuisson-dev"
         self.collection_name = "users"
 
     def tearDown(self) -> None:
-        delete_one_in_collection(db_name=self.db_name, collection_name=self.collection_name,
-                                 search_query={"_id": "ekeneattoh@test.com"})
+        docs_to_delete = [{"_id": "ekeneattoh@test.com"}, {"_id": "manonpicot@test.com"}]
+        for doc in docs_to_delete:
+            delete_one_in_collection(db_name=self.db_name, collection_name=self.collection_name,
+                                 search_query=doc)
 
     def test_insert_one_into_db_collection(self):
         """
 
         :return:
         """
-        insert_test = insert_one_into_db_collection(db_name=self.db_name, collection_name=self.collection_name,
-                                                    data=self.data)
+        insert_result = insert_one_into_db_collection(db_name=self.db_name, collection_name=self.collection_name,
+                                                      data=self.data)
+
+        assert insert_result["data"] == "OK"
+
+    def test_insert_many_into_db_collection(self):
+        """
+
+        :return:
+        """
+        data = [self.data, self.data_two]
+        insert_test = insert_many_into_db_collection(db_name=self.db_name, collection_name=self.collection_name,
+                                                     data=data)
 
         assert insert_test["data"] == "OK"
 

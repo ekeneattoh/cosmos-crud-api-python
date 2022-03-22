@@ -37,6 +37,34 @@ def insert_one_into_db_collection(db_name: str, collection_name: str, data: dict
     return result
 
 
+def insert_many_into_db_collection(db_name: str, collection_name: str, data: list) -> dict:
+    """
+
+    :param db_name: name of the db
+    :param collection_name: name of the db collection
+    :param data: list of data to be inserted
+    :return: dict of the result of the insert
+    """
+
+    result = {}
+
+    db = get_database(db_name=db_name)
+
+    collection = db[collection_name]
+
+    try:
+        insert_result = collection.insert_many(data)
+        if len(insert_result.inserted_ids) != 0:
+            result["data"] = "OK"
+            result["status_message"] = "OK"
+
+    except WriteError as e:
+        result["data"] = str(e)
+        result["status_message"] = "ERROR"
+
+    return result
+
+
 def find_one_in_collection(db_name: str, collection_name: str, search_query: dict) -> dict:
     """
 
