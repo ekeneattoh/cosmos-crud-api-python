@@ -28,8 +28,10 @@ def insert_one_into_db_collection(db_name: str, collection_name: str, data: dict
         insert_result = collection.insert_one(data)
         if insert_result.inserted_id is not None:
             result["data"] = "OK"
+            result["status_message"] = "OK"
 
     except WriteError as e:
         result["data"] = str(e)
+        result["status_message"] = "ERROR"
 
     return result
