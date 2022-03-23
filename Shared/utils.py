@@ -1,5 +1,5 @@
 import pymongo
-from pymongo.errors import WriteError, PyMongoError
+from pymongo.errors import WriteError, PyMongoError, BulkWriteError
 
 client = pymongo.MongoClient(
     "mongodb+srv://onaide-dev:Aderonke!4@cluster0.v3ppc.mongodb.net/cocuisson-dev?retryWrites=true&w=majority")
@@ -58,7 +58,7 @@ def insert_many_into_db_collection(db_name: str, collection_name: str, data: lis
             result["data"] = "OK"
             result["status_message"] = "OK"
 
-    except WriteError as e:
+    except BulkWriteError as e:
         result["data"] = str(e)
         result["status_message"] = "ERROR"
 
@@ -124,7 +124,7 @@ def find_many_in_collection(db_name: str, collection_name: str, search_query: di
             result["data"] = "No documents found matching that query"
             result["status_message"] = "ERROR"
     except PyMongoError as e:
-        result["data"] = str(e)
+        result["data"] = "an error"
         result["status_message"] = "ERROR"
 
     return result
@@ -148,12 +148,12 @@ def update_one_set_in_collection(db_name: str, collection_name: str, search_quer
 
     try:
         result_document = collection.update_one(filter=search_query, update={"$set": update_query})
-        if result_document.modified_count == 1:
-            result["data"] = "OK"
-            result["status_message"] = "OK"
         if result_document.matched_count != 1:
             result["data"] = "No documents found matching that query"
             result["status_message"] = "ERROR"
+        elif result_document.modified_count == 1:
+            result["data"] = "OK"
+            result["status_message"] = "OK"
 
     except WriteError as e:
         result["data"] = str(e)
@@ -179,8 +179,8 @@ def delete_one_in_collection(db_name: str, collection_name: str, search_query: d
 
     try:
         result_document = collection.delete_one(filter=search_query)
-        if result_document is not None:
-            result["data"] = result_document
+        if result_document.deleted_count == 1:
+            result["data"] = "OK"
             result["status_message"] = "OK"
         else:
             result["data"] = "Document does not exist!"

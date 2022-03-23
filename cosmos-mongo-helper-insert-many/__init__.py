@@ -2,7 +2,7 @@ import logging
 
 import azure.functions as func
 
-from Shared.utils import insert_one_into_db_collection
+from Shared.utils import insert_many_into_db_collection
 
 import json
 
@@ -18,16 +18,15 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
             db_name = req_body["db_name"]
             collection_name = req_body["collection_name"]
 
-            req_body.pop("db_name")
-            req_body.pop("collection_name")
+            data_to_insert = req_body["data"]
 
-            insert_one_result = insert_one_into_db_collection(db_name=db_name, collection_name=collection_name,
-                                                              data=req_body)
+            insert_many_result = insert_many_into_db_collection(db_name=db_name, collection_name=collection_name,
+                                                               data=data_to_insert)
 
-            if insert_one_result["status_message"] == "OK":
-                return func.HttpResponse(json.dumps(insert_one_result), status_code=200)
-            elif insert_one_result["status_message"] == "ERROR":
-                return func.HttpResponse(json.dumps(insert_one_result), status_code=400)
+            if insert_many_result["status_message"] == "OK":
+                return func.HttpResponse(json.dumps(insert_many_result), status_code=200)
+            elif insert_many_result["status_message"] == "ERROR":
+                return func.HttpResponse(json.dumps(insert_many_result), status_code=400)
         else:
             return func.HttpResponse(
                 "Please pass valid JSON in the request body.",

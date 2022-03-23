@@ -72,15 +72,8 @@ class TestUtils(unittest.TestCase):
         insert_one_into_db_collection(db_name=self.db_name, collection_name=self.collection_name,
                                       data=self.data)
 
-        data_two = {
-            "firstname": "Manon",
-            "lastname": "Picot",
-            "_id": "manonpicot@test.com",
-            "company_name": "cocuisson"
-        }
-
         insert_one_into_db_collection(db_name=self.db_name, collection_name=self.collection_name,
-                                      data=data_two)
+                                      data=self.data_two)
 
         find_result = find_many_in_collection(db_name=self.db_name, collection_name=self.collection_name,
                                               search_query={"company_name": "cocuisson"})
@@ -103,3 +96,16 @@ class TestUtils(unittest.TestCase):
                                                      update_query={"company_name": "Onaide"})
 
         assert update_result["data"] == "OK"
+
+    def test_delete_one_into_db_collection(self):
+        """
+
+        :return:
+        """
+        insert_one_into_db_collection(db_name=self.db_name, collection_name=self.collection_name,
+                                      data=self.data)
+
+        delete_result = delete_one_in_collection(db_name=self.db_name, collection_name=self.collection_name,
+                                                     search_query={"_id": "ekeneattoh@test.com"})
+
+        assert delete_result["data"] == "OK"
