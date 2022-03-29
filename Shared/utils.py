@@ -1,8 +1,8 @@
 import pymongo
+from os import getenv
 from pymongo.errors import WriteError, PyMongoError, BulkWriteError
 
-client = pymongo.MongoClient(
-    "mongodb+srv://onaide-dev:Aderonke!4@cluster0.v3ppc.mongodb.net/cocuisson-dev?retryWrites=true&w=majority")
+client = pymongo.MongoClient(getenv("MONGO_DB_URL"))
 
 
 def get_database(db_name: str):
