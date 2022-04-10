@@ -151,7 +151,7 @@ def update_one_set_in_collection(db_name: str, collection_name: str, search_quer
         if result_document.matched_count != 1:
             result["data"] = "No documents found matching that query"
             result["status_message"] = "ERROR"
-        elif result_document.modified_count == 1:
+        elif result_document.modified_count <= 1:
             result["data"] = "OK"
             result["status_message"] = "OK"
 
