@@ -32,8 +32,8 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
                 "Please pass valid JSON in the request body.",
                 status_code=400
             )
-    except ValueError:
+    except ValueError as e:
         return func.HttpResponse(
-            "Please pass valid JSON in the request body.",
+            str(e),
             status_code=400
         )
