@@ -3,5 +3,5 @@
 # Manually managing azure-functions-worker may cause unexpected issues
 
 azure-functions
-pymongo~=4.0.2
+pymongo==4.2.0
 dnspython==2.0.0
